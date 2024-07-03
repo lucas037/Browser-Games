@@ -32,7 +32,6 @@ export function addPlayertoParty(code: string, player: Player): void {
 export function updateParty(code: string, party: Party): void {
   const partyDocRef = doc(partiesCollection, code);
 
-  alert("opa");
   setDoc(partyDocRef, party);
 }
 

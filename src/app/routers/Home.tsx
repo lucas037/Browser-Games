@@ -27,7 +27,7 @@ export default function HomeScreen({updateContext}: HomeScreenProps) {
           name: name,
           partyId: partyId,
           leader: true,
-          status: "Not Ready"
+          status: "Ready"
         }
   
         await addPlayertoParty(partyId, player);

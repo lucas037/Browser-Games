@@ -32,9 +32,10 @@ const Home = () => {
 
       await addPlayertoParty(partyId, player);
 
-      setIdPlayer(playerId); // Atualiza o contexto com o novo idPlayer
-
-      window.location.href = "/" + partyId;
+      if (typeof window !== "undefined") {
+        setIdPlayer(playerId); // Atualiza o contexto com o novo idPlayer
+        window.location.href = "/" + partyId;
+      }
     }
   }
 
@@ -55,8 +56,6 @@ const Home = () => {
     if (partyId != null) {
       let playerId = await addPlayersAcess(name, partyId, false);
 
-      setIdPlayer(playerId); // Atualiza o contexto com o novo idPlayer
-
       // Adiciona o jogador ao grupo
       const player: Player = {
         name: name,
@@ -65,9 +64,11 @@ const Home = () => {
         status: "Not Ready"
       }
       await addPlayertoParty(partyId, player);
-      
-      // Redireciona para a página da party
-      window.location.href = "/" + partyId;
+
+      if (typeof window !== "undefined") {
+        setIdPlayer(playerId); // Atualiza o contexto com o novo idPlayer
+        window.location.href = "/" + partyId;
+      }
     }
   }
 

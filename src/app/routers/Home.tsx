@@ -21,14 +21,16 @@ export default function HomeScreen({updateContext}: HomeScreenProps) {
         const joinCodeParty = Math.floor(Math.random() * 999999).toString();
   
         let partyId = await addPartyAcess(joinCodeParty);
-        let playerId = await addPlayersAcess(name, partyId, true);
   
         const player: Player = {
           name: name,
           partyId: partyId,
           leader: true,
-          status: "Ready"
+          status: "Ready",
+          cards: []
         }
+        
+        let playerId = await addPlayersAcess(player);
   
         await addPlayertoParty(partyId, player);
 
@@ -51,15 +53,16 @@ export default function HomeScreen({updateContext}: HomeScreenProps) {
         }
 
         if (partyId != null) {
-            let playerId = await addPlayersAcess(name, partyId, false);
-
-            // Adiciona o jogador ao grupo
             const player: Player = {
                 name: name,
                 partyId: partyId,
                 leader: false,
-                status: "Not Ready"
+                status: "Not Ready",
+                cards: []
             }
+
+            let playerId = await addPlayersAcess(player);
+
             await addPlayertoParty(partyId, player);
 
             updateContext(playerId);

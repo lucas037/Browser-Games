@@ -7,7 +7,7 @@ import { Player } from "@/app/types/PlayerType";
 import { useEffect, useState } from "react";
 
 interface Props {
-    partyStarted: (stage: string) => void
+    partyStarted: (party: Party, player: Player) => void
 }
 
 function App({partyStarted}: Props) {
@@ -21,20 +21,20 @@ function App({partyStarted}: Props) {
         let player: Player | null = await getPlayerById(idPlayer);
 
         if (player != null) {
-        setPlayer(player);
+            setPlayer(player);
 
-        const party: Party | null = await getPartyById(player.partyId);
+            const party: Party | null = await getPartyById(player.partyId);
 
-        let allPlayers: Player[] | null;
-        if (party != null) {
-            if (party.stage != "queue") {
-                partyStarted(party.stage);
+            let allPlayers: Player[] | null;
+            if (party != null) {
+                if (party.stage != "queue") {
+                    partyStarted(party, player);
+                }
+
+                setParty(party);
+                allPlayers = party.players;
+                setAllPlayers(allPlayers);
             }
-
-            setParty(party);
-            allPlayers = party.players;
-            setAllPlayers(allPlayers);
-        }
         }
     }
     const path = window.location.pathname;
@@ -77,7 +77,7 @@ function App({partyStarted}: Props) {
                 copyParty.stage = "In preparation";
                 setParty(copyParty);
                 updateParty(player.partyId, copyParty);
-                partyStarted(party.stage);
+                partyStarted(party, player);
             }
         }
 
@@ -94,16 +94,16 @@ function App({partyStarted}: Props) {
                     {allPlayers.map((actualPlayer, index) => (
                     <div key={index} className="flex gap-1">
                         <div className="bg-[#182237] text-white flex justify-center items-center border-2 w-[350px] h-12 gap-1 text-2xl">{actualPlayer.name}</div>
-                        { // caso o jogador não seja o líder, será mostrado se está pronto
-                        !actualPlayer.leader && <div className="bg-[#182237] text-white w-[200px] h-12 flex justify-center items-center">
-                        {
-                            actualPlayer.name == player.name && <button onClick={changeStatusPlayer}><div>{actualPlayer.status}</div></button>
-                        }
-                        {
-                            actualPlayer.name != player.name && <div>{actualPlayer.status}</div>
-                        }
-                        </div>
-                        }
+                            { // caso o jogador não seja o líder, será mostrado se está pronto
+                            !actualPlayer.leader && <div className="bg-[#182237] text-white w-[200px] h-12 flex justify-center items-center">
+                                {
+                                    actualPlayer.name == player.name && <button onClick={changeStatusPlayer}><div>{actualPlayer.status}</div></button>
+                                }
+                                {
+                                    actualPlayer.name != player.name && <div>{actualPlayer.status}</div>
+                                }
+                            </div>
+                            }
                         { // caso o jogador seja o líder, será informado que é o líder
                         actualPlayer.leader && <div className="bg-[#182237] text-white w-[200px] h-12 flex justify-center items-center">⭐</div>
                         }

@@ -4,11 +4,13 @@ import { collection, addDoc, query, where, getDocs, doc, getDoc } from "firebase
 
 const playersCollection = collection(db, "players");
 
-export function addPlayersAcess(name: string, partyId: string, leader: boolean): Promise<string> {
+export function addPlayersAcess(player: Player): Promise<string> {
   return addDoc(playersCollection, {
-    name: name,
-    partyId: partyId,
-    leader: leader
+    name: player.name,
+    partyId: player.partyId,
+    leader: player.leader,
+    status: player.status,
+    cards: player.cards
   })
   .then((docRef) => {
     console.log("Documento adicionado com ID: ", docRef.id);
@@ -24,6 +26,7 @@ export function addPlayersAcess(name: string, partyId: string, leader: boolean):
 export async function getPlayerById(id: string): Promise<Player | null> {
   const docRef = doc(playersCollection, id);
 
+
   try {
     const docSnapshot = await getDoc(docRef);
 
@@ -36,8 +39,10 @@ export async function getPlayerById(id: string): Promise<Player | null> {
         name: docSnapshot.data().name,
         leader: docSnapshot.data().leader,
         partyId: docSnapshot.data().partyId,
-        status: docSnapshot.data().status
+        status: docSnapshot.data().status,
+        cards: docSnapshot.data().cards
       }
+
 
       return player;
     }
@@ -64,7 +69,8 @@ export async function getPlayersByPartyCode(code: string): Promise<Player[] | nu
           name: data.name,
           leader: data.leader,
           partyId: data.partyId,
-          status: data.status
+          status: data.status,
+          cards: data.cards
         };
       }).reverse();
       

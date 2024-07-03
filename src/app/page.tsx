@@ -3,13 +3,11 @@
 import React, { useRef } from 'react';
 import { addPlayersAcess } from './services/dataAcess/playersAcess';
 import { addPartyAcess, addPlayertoParty, getPartyIdByCode } from './services/dataAcess/partyAcess';
-import { IdPlayerProvider, useIdPlayer } from './contexts/PlayerContext';
 import { Player } from './types/PlayerType';
 
 const Home = () => {
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputCodeRef = useRef<HTMLInputElement>(null);
-  const { idPlayer, setIdPlayer } = useIdPlayer();
 
   async function createParty() {
     let name = "";
@@ -31,11 +29,6 @@ const Home = () => {
       }
 
       await addPlayertoParty(partyId, player);
-
-      if (typeof window !== "undefined") {
-        setIdPlayer(playerId); // Atualiza o contexto com o novo idPlayer
-        window.location.href = "/" + partyId;
-      }
     }
   }
 
@@ -64,11 +57,6 @@ const Home = () => {
         status: "Not Ready"
       }
       await addPlayertoParty(partyId, player);
-
-      if (typeof window !== "undefined") {
-        setIdPlayer(playerId); // Atualiza o contexto com o novo idPlayer
-        window.location.href = "/" + partyId;
-      }
     }
   }
 
@@ -98,9 +86,7 @@ const Home = () => {
 };
 
 const App = () => (
-  <IdPlayerProvider>
-    <Home />
-  </IdPlayerProvider>
+  <Home />
 );
 
 export default App;

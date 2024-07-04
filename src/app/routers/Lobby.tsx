@@ -74,7 +74,7 @@ function App({partyStarted}: Props) {
             }
 
             if (isAllReady) {
-                copyParty.stage = "In preparation";
+                copyParty.stage = "in-preparation-leader";
                 setParty(copyParty);
                 updateParty(player.partyId, copyParty);
                 partyStarted(party, player);

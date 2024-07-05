@@ -14,6 +14,7 @@ function App() {
 
     useEffect(() => {
         if (party != null && player != null) {
+            console.log(party.stage);
             if (indexPlayer == 10) {
                 for (let i = 0; i < party.players.length; i++) {
                     if (player.name == party.players[i].name)
@@ -29,6 +30,7 @@ function App() {
                 if (player.leader) {
                     checkPreparationPlayers(party, player);
                 }
+
             }
         }
 

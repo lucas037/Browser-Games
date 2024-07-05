@@ -7,7 +7,7 @@ import { Player } from "@/app/types/PlayerType";
 import { useEffect, useState } from "react";
 
 interface Props {
-    partyStarted: (party: Party, player: Player) => void
+    partyStarted: (party: Party, player: Player, indexPlayer: number) => void
 }
 
 function App({partyStarted}: Props) {
@@ -28,7 +28,11 @@ function App({partyStarted}: Props) {
             let allPlayers: Player[] | null;
             if (party != null) {
                 if (party.stage != "queue") {
-                    partyStarted(party, player);
+                    for (let i = 0; i < party.players.length; i++) {
+                        if (player.name == party.players[i].name) {
+                            partyStarted(party, player, i);
+                        }
+                    }
                 }
 
                 setParty(party);
@@ -77,7 +81,13 @@ function App({partyStarted}: Props) {
                 copyParty.stage = "in-preparation-leader";
                 setParty(copyParty);
                 updateParty(player.partyId, copyParty);
-                partyStarted(party, player);
+
+                for (let i = 0; i < party.players.length; i++) {
+                    if (player.name == party.players[i].name) {
+                        partyStarted(party, player, i);
+                    }
+                }
+
             }
         }
 

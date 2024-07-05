@@ -10,7 +10,8 @@ export function addPlayersAcess(player: Player): Promise<string> {
     partyId: player.partyId,
     leader: player.leader,
     status: player.status,
-    cards: player.cards
+    cards: player.cards,
+    coins: player.coins
   })
   .then((docRef) => {
     console.log("Documento adicionado com ID: ", docRef.id);
@@ -40,7 +41,8 @@ export async function getPlayerById(id: string): Promise<Player | null> {
         leader: docSnapshot.data().leader,
         partyId: docSnapshot.data().partyId,
         status: docSnapshot.data().status,
-        cards: docSnapshot.data().cards
+        cards: docSnapshot.data().cards,
+        coins: docSnapshot.data().coins
       }
 
 
@@ -70,7 +72,8 @@ export async function getPlayersByPartyCode(code: string): Promise<Player[] | nu
           leader: data.leader,
           partyId: data.partyId,
           status: data.status,
-          cards: data.cards
+          cards: data.cards,
+          coins: data.coins
         };
       }).reverse();
       

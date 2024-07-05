@@ -27,7 +27,8 @@ export default function HomeScreen({updateContext}: HomeScreenProps) {
           partyId: partyId,
           leader: true,
           status: "Ready",
-          cards: []
+          cards: [],
+          coins: 2
         }
         
         let playerId = await addPlayersAcess(player);
@@ -58,7 +59,8 @@ export default function HomeScreen({updateContext}: HomeScreenProps) {
                 partyId: partyId,
                 leader: false,
                 status: "Not Ready",
-                cards: []
+                cards: [],
+                coins: 2
             }
 
             let playerId = await addPlayersAcess(player);

@@ -13,29 +13,7 @@ function App() {
     const [indexPlayer, setIndexPlayer] = useState(10);
 
     useEffect(() => {
-        const asyncFunction = async () => {
-            if (party != null && player != null) {
-                console.log(party.stage);
-                if (indexPlayer === 10) {
-                    for (let i = 0; i < party.players.length; i++) {
-                        if (player.name === party.players[i].name) {
-                            setIndexPlayer(i);
-                        }
-                    }
-                }
-    
-                if (party.stage === "in-preparation-leader" && player.leader) {
-                    cardsDistribution(party, player);
-                } else if (party.stage === "in-preparation-players") {
-                    getCards(party, player);
-    
-                    await checkPreparationPlayers(party, player);
-                }
-            }
-        };
-    
-        asyncFunction();
-    }, [party, player, indexPlayer]);
+    })
 
     // aleatoriza um array de strings
     function shuffleString(array: string[]) {
@@ -47,9 +25,14 @@ function App() {
     }
 
     // recebe a informação de que os players iniciaram a partida
-    function partyStarted(party: Party, player: Player) {
+    async function partyStarted(party: Party, player: Player, indexPlayer: number) {
         setParty(party);
         setPlayer(player);
+        setIndexPlayer(indexPlayer);
+
+        if (party != null && player != null && party.stage === "in-preparation-leader" && player.leader) {
+            cardsDistribution(party, player);
+        }
     }
 
     // distribui as cartas entre os jogadores
@@ -82,7 +65,7 @@ function App() {
             party.players[i].status = "Not Ready";
         }
 
-        party.stage = "in-preparation-players";
+        party.stage = "in-game";
         setParty(party);
         updateParty(player.partyId, party);
     }
@@ -98,26 +81,6 @@ function App() {
         }
     }
 
-    async function checkPreparationPlayers(party: Party, player: Player) {
-        const copyParty: Party | null = await getPartyById(player.partyId);
-
-        if (copyParty != null) {
-            let isTrue = true;
-
-            for (let i = 0; i < copyParty.players.length; i++) {
-                if (copyParty.players[i].status == "Not Ready")
-                    isTrue = false;
-            }
-
-            if (isTrue) {
-                copyParty.stage = "in-game";
-                updateParty(player.partyId, copyParty);
-            }
-        }
-
-        
-    }
-
     return (
         <div>
             {
@@ -126,7 +89,7 @@ function App() {
             }
             {
                 party != null && player != null && party.stage == "in-game" &&
-                <h1 className="w-screen h-screen flex justify-center items-center text-2xl">{player.cards[0]?.name} / {player.cards[1]?.name}</h1>
+                <h1 className="w-screen h-screen flex justify-center items-center text-2xl">{party.stage} / {party.players[indexPlayer].cards[0].name} / {party.players[indexPlayer].cards[1].name}</h1>
             }
         </div>
     )

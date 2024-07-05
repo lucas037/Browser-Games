@@ -5,5 +5,6 @@ export type Player = {
   leader: boolean,
   partyId: string,
   status: string,
-  cards: Card[]
+  cards: Card[],
+  coins: number
 }

@@ -13,28 +13,31 @@ function App() {
     const [indexPlayer, setIndexPlayer] = useState(10);
 
     useEffect(() => {
-        if (party != null && player != null) {
-            console.log(party.stage);
-            if (indexPlayer == 10) {
-                for (let i = 0; i < party.players.length; i++) {
-                    if (player.name == party.players[i].name)
-                        setIndexPlayer(i);
+        const asyncFunction = async () => {
+            if (party != null && player != null) {
+                console.log(party.stage);
+                if (indexPlayer === 10) {
+                    for (let i = 0; i < party.players.length; i++) {
+                        if (player.name === party.players[i].name) {
+                            setIndexPlayer(i);
+                        }
+                    }
+                }
+    
+                if (party.stage === "in-preparation-leader" && player.leader) {
+                    cardsDistribution(party, player);
+                } else if (party.stage === "in-preparation-players") {
+                    getCards(party, player);
+    
+                    if (player.leader) {
+                        await checkPreparationPlayers(party, player);
+                    }
                 }
             }
-            if (party.stage == "in-preparation-leader" && player.leader) {
-                cardsDistribution(party, player);
-            }
-            else if (party.stage == "in-preparation-players") {
-                getCards(party, player);
-
-                if (player.leader) {
-                    checkPreparationPlayers(party, player);
-                }
-
-            }
-        }
-
-    })
+        };
+    
+        asyncFunction();
+    }, [party, player, indexPlayer]);
 
     // aleatoriza um array de strings
     function shuffleString(array: string[]) {
@@ -99,7 +102,6 @@ function App() {
 
     async function checkPreparationPlayers(party: Party, player: Player) {
         const copyParty: Party | null = await getPartyById(player.partyId);
-
 
         if (copyParty != null) {
             let isTrue = true;

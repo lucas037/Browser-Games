@@ -29,9 +29,7 @@ function App() {
                 } else if (party.stage === "in-preparation-players") {
                     getCards(party, player);
     
-                    if (player.leader) {
-                        await checkPreparationPlayers(party, player);
-                    }
+                    await checkPreparationPlayers(party, player);
                 }
             }
         };

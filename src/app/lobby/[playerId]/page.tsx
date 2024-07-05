@@ -7,6 +7,14 @@ import { Party } from "@/app/types/PartyType";
 import { Player } from "@/app/types/PlayerType";
 import { useEffect, useState } from "react";
 
+const cards: Record<string, string> = {
+    Contessa: "https://i.imgur.com/I00Uogf.png",
+    Duke: "https://i.imgur.com/9EOacO5.png",
+    Assassin: "https://i.imgur.com/zVwtWjp.png",
+    Ambassador: "https://i.imgur.com/WkDeI9j.png",
+    Captain: "https://i.imgur.com/h7nErOD.png",
+  };
+
 function App() {
     const [party, setParty] = useState<Party>();
     const [player, setPlayer] = useState<Player>();
@@ -89,7 +97,10 @@ function App() {
             }
             {
                 party != null && player != null && party.stage == "in-game" &&
-                <h1 className="w-screen h-screen flex justify-center items-center text-2xl">{party.stage} / {party.players[indexPlayer].cards[0].name} / {party.players[indexPlayer].cards[1].name}</h1>
+                <div className="h-screen flex justify-center gap-2 items-end">
+                    <img src={cards[`${party.players[indexPlayer].cards[0].name}`]} className="h-1/3 mb-2"/>
+                    <img src={cards[`${party.players[indexPlayer].cards[1].name}`]} className="h-1/3 mb-2"/>
+                </div>
             }
         </div>
     )
